@@ -1,0 +1,121 @@
+Feature: This is kmart
+Scenario: This kmart
+
+Given I am on kmart page
+When I click search as both
+Then I create log
+
+
+
+
+
+
+package runner;
+
+import org.junit.runner.RunWith;
+
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+
+@RunWith(Cucumber.class)
+@CucumberOptions(
+    features = "features",
+    glue = "stepdefinition"
+
+)
+public class AppTest {
+
+}
+
+
+
+
+
+
+
+package stepdefinition;
+
+import java.io.IOException;
+import java.util.Properties;
+
+import com.aventstack.extentreports.ExtentReports;
+
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import utils.Base;
+import utils.Reporter;
+
+public class Hooks extends Base {
+public static Properties prop;
+    public static ExtentReports extentReport;
+
+    @Before
+    public void setUp() throws IOException{
+        openBrowser();
+        extentReport=Reporter.generateExtentReport("kmart");
+    }
+
+    @After
+    public void tearDown(){
+        if(driver!=null){
+            driver.quit();
+        }
+        extentReport.flush();
+    }
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+package stepdefinition;
+
+import java.util.Properties;
+
+import org.openqa.selenium.By;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.messages.types.Hook;
+import utils.Base;
+
+public class stepdefinition1 extends Base {
+    public static ExtentTest test;
+    public static ExtentReports extentReport;
+    @Given("I am on kmart page")
+    public void i_am_on_kmart_page(){
+        test=Hooks.extentReport.createTest("testcase01");
+    }
+    @When("I click search as both")
+    public void i_click_search_as_both() throws InterruptedException{
+        driver.findElement(By.xpath("//input[@id='app_search_input_mobile']")).click();
+        driver.findElement(By.xpath("//input[@id='app_search_input_mobile']")).sendKeys("Washing Machine");
+        Thread.sleep(4000);
+        driver.get("https://www.kmart.com");
+        Thread.sleep(4000);
+        driver.findElement(By.xpath("//input[@id='app_search_input_mobile']")).sendKeys("Dell Desktop Computer");
+        
+    }
+    @Then("i create log")
+public void i_create_log() {
+   
+}
+
+    
+
+
+}
